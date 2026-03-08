@@ -1,0 +1,96 @@
+// components/logout-dialog.tsx
+"use client";
+
+import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Power, LogOut } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+
+export const logout = async () => {
+  try {
+    const base = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+    await fetch(`${base}/auth/logout/`, {
+      method: "POST",
+      credentials: "include", // Send cookies
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    window.location.href = "/login";
+  }
+};
+
+export function LogoutDialog() {
+  const t = useTranslations("Sidebar");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <div className="relative group">
+          <button
+            onClick={() => handleLogout()}
+            className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5
+                text-sm text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300
+                ${isRTL ? "flex-row-reverse text-right" : ""}`}
+          >
+            <LogOut size={15} className="shrink-0" />
+            {t("logout")}
+          </button>
+
+          {/* Tooltip */}
+          <div
+            className="absolute right-0 top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs 
+              rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 
+              pointer-events-none whitespace-nowrap z-50"
+          >
+            Déconnexion
+            <div className="absolute -top-1 right-3 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+          </div>
+        </div>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <LogOut className="h-5 w-5 text-red-500" />
+            Confirmer la déconnexion
+          </DialogTitle>
+          <DialogDescription>Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.</DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter className="gap-2 sm:gap-0">
+          <button type="button" onClick={() => setOpen(false)} disabled={isLoading}>
+            Annuler
+          </button>
+          <button type="button" onClick={handleLogout} disabled={isLoading} className="gap-2">
+            {isLoading ? (
+              <>
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Déconnexion...
+              </>
+            ) : (
+              <>
+                <LogOut className="h-4 w-4" />
+                Se déconnecter
+              </>
+            )}
+          </button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

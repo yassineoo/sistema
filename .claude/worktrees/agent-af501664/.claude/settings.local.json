@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(npx next build:*)",
+      "Bash(find:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Home\\Desktop\\AndroidStudioProjects\\dev\\work\\personalProject\\ibn-badis\\app\\[locale]\\(app)"
+    ]
+  }
+}

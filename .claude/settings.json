@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit --project tsconfig.json)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''order'', {}\\), indent=2, ensure_ascii=False\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2, ensure_ascii=False\\)\\)\")",
+      "Bash(npx tsc --noEmit)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Home\\Desktop\\AndroidStudioProjects\\dev\\work\\personalProject\\sistema-frontend\\app\\api\\proxy",
+      "C:\\Users\\Home\\Desktop\\AndroidStudioProjects\\dev\\work\\personalProject\\sistema-frontend\\app\\[locale]\\products",
+      "C:\\Users\\Home\\Desktop\\AndroidStudioProjects\\dev\\work\\personalProject\\sistema-frontend\\app\\[locale]\\track"
+    ]
+  }
+}

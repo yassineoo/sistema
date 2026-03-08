@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #2B2B2B;
+
+  /* Brand palette */
+  --brand-primary:  #0F9D58;
+  --brand-dark:     #0A6E3F;
+  --brand-deeper:   #075A34;
+  --brand-white:    #F2F2F2;
+  --brand-silver:   #C9CED3;
+  --brand-text:     #2B2B2B;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Primary — Brand Green #0F9D58 */
+  --color-primary-50:  #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #0F9D58;
+  --color-primary-700: #0A6E3F;
+  --color-primary-800: #075A34;
+  --color-primary-900: #14532d;
+  --color-primary-950: #052e16;
+  --color-primary:     #0F9D58;
+
+  /* Secondary — Near Black #1A1A1A */
+  --color-secondary-50:  #f7f7f7;
+  --color-secondary-100: #e3e3e3;
+  --color-secondary-200: #c8c8c8;
+  --color-secondary-300: #a4a4a4;
+  --color-secondary-400: #818181;
+  --color-secondary-500: #666666;
+  --color-secondary-600: #515151;
+  --color-secondary-700: #434343;
+  --color-secondary-800: #383838;
+  --color-secondary-900: #2B2B2B;
+  --color-secondary-950: #0d0d0d;
+  --color-secondary:     #2B2B2B;
+
+  /* Accent */
+  --color-accent:  #F2F2F2;
+  --color-silver:  #C9CED3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #F2F2F2;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Sidebar animations ─────────────────────────── */
+@keyframes sidebar-slide-in {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes sidebar-slide-in-rtl {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes nav-item-in {
+  from { transform: translateX(-12px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes nav-item-in-rtl {
+  from { transform: translateX(12px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes badge-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1);    }
+  50%       { opacity: 0.75; transform: scale(1.06); }
+}
+@keyframes dropdown-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+@keyframes glow-ring {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(15,157,88,0);    }
+  50%       { box-shadow: 0 0 0 4px rgba(15,157,88,0.18); }
+}
+
+.sidebar-animate      { animation: sidebar-slide-in     0.4s cubic-bezier(0.16,1,0.3,1) both; }
+.sidebar-animate-rtl  { animation: sidebar-slide-in-rtl 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+.nav-item-animate     { animation: nav-item-in          0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.nav-item-animate-rtl { animation: nav-item-in-rtl      0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.badge-pulse          { animation: badge-pulse           2s ease-in-out infinite; }
+.dropdown-animate     { animation: dropdown-in           0.2s cubic-bezier(0.16,1,0.3,1) both; }
+.active-glow          { animation: glow-ring             2.5s ease-in-out infinite; }
+
+/* ── Modal / Panel animations ───────────────────── */
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes panel-slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes panel-slide-in-rtl {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes modal-scale-in {
+  from { transform: scale(0.95) translateY(8px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);   opacity: 1; }
+}
+
+.backdrop-animate    { animation: backdrop-in      0.2s ease both; }
+.panel-animate       { animation: panel-slide-in     0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.panel-animate-rtl   { animation: panel-slide-in-rtl 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.modal-animate       { animation: modal-scale-in     0.25s cubic-bezier(0.16,1,0.3,1) both; }

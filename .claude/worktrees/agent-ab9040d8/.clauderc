@@ -1,0 +1,12 @@
+{
+  "autoApprove": {
+    "fileRead": true,
+    "fileWrite": true,
+    "fileCreate": true,
+    "commandRun": true
+  },
+  "confirmBefore": {
+    "fileDelete": true,
+    "packageInstall": true
+  }
+}
