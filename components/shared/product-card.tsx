@@ -3,6 +3,7 @@
 import { ShoppingCart, Star, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { Product } from "@/types/api";
 
 interface ProductCardProps {
@@ -35,6 +36,9 @@ export default function ProductCard({
       transition={{ duration: 0.22, ease: "easeOut" }}
       className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-secondary-100 transition-shadow duration-300 hover:shadow-xl hover:shadow-secondary-900/8 hover:ring-secondary-200"
     >
+      {/* ── Clickable area (image + body) ─────────── */}
+      <Link href={`/products/${product.slug}`} className="flex flex-col flex-1 min-h-0">
+
       {/* ── Image ─────────────────────────────────── */}
       <div className="relative aspect-4/3 w-full overflow-hidden">
         {imageSrc ? (
@@ -107,6 +111,8 @@ export default function ProductCard({
           </p>
         )}
       </div>
+
+      </Link>
 
       {/* ── Footer ────────────────────────────────── */}
       <div className="flex flex-col gap-3 border-t border-secondary-100 p-4 pt-3">
