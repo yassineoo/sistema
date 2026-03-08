@@ -12,9 +12,9 @@ export default function HomePage() {
     <main>
       <PublicNavbar />
       <HeroSection />
+      <FeaturedProducts />
       <TrustBadges />
       <CategoriesShowcase />
-      <FeaturedProducts />
       <HowItWorks />
       <Footer />
     </main>

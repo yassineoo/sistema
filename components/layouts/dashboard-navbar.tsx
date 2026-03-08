@@ -14,7 +14,6 @@ import {
   X,
   LogOut,
   ChevronRight,
-  ShoppingBag,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -112,15 +111,17 @@ function SidebarContent({ isRTL, t, user, onClose, onLogout }: SidebarContentPro
     <div className="flex h-full flex-col bg-gradient-to-b from-primary-700 to-primary-800">
       {/* Logo */}
       <div
-        className={`flex items-center gap-3 border-b border-white/10 px-5 py-5 ${
+        className={`flex items-center gap-3 border-b border-white/10 px-5 py-4 ${
           isRTL ? "flex-row-reverse" : ""
         }`}
       >
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-          <ShoppingBag size={18} className="text-white" />
-        </div>
-        <div className={`flex-1 ${isRTL ? "text-right" : "text-left"}`}>
-          <p className="text-sm font-bold tracking-wide text-white">BOUTIQUE</p>
+        <img
+          src="/logo.jpeg"
+          alt="Sestima Confort"
+          className="h-9 w-9 shrink-0 rounded-xl object-cover ring-2 ring-white/20"
+        />
+        <div className={`flex-1 min-w-0 ${isRTL ? "text-right" : "text-left"}`}>
+          <p className="truncate text-sm font-bold tracking-wide text-white">Sestima Confort</p>
           <p className="text-[10px] font-medium uppercase tracking-widest text-white/60">
             Dashboard
           </p>
@@ -283,11 +284,13 @@ export default function DashboardNavbar({ children }: DashboardNavbarProps) {
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-600">
-              <ShoppingBag size={14} className="text-white" />
-            </div>
+            <img
+              src="/logo.jpeg"
+              alt="Sestima Confort"
+              className="h-7 w-7 rounded-lg object-cover"
+            />
             <span className="text-sm font-bold text-secondary-900">
-              BOUT<span className="text-primary-600">IQUE</span>
+              Sestima <span className="text-primary-600">Confort</span>
             </span>
           </div>
           <div className="w-9" aria-hidden="true" />

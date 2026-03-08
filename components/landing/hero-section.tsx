@@ -43,14 +43,14 @@ export default function HeroSection() {
   const t = useTranslations("hero");
 
   const stats = [
-    { value: t("stat1Value"), label: t("stat1Label"), icon: <Package size={18} /> },
-    { value: t("stat2Value"), label: t("stat2Label"), icon: <Award size={18} /> },
-    { value: null, label: t("stat3Label"), icon: <Truck size={18} /> },
-    { value: null, label: t("stat4Label"), icon: <Headphones size={18} /> },
+    { value: t("stat1Value"), label: t("stat1Label"), icon: <Package size={16} />, mobileHide: false },
+    { value: t("stat2Value"), label: t("stat2Label"), icon: <Award size={16} />, mobileHide: false },
+    { value: null, label: t("stat3Label"), icon: <Truck size={16} />, mobileHide: true },
+    { value: null, label: t("stat4Label"), icon: <Headphones size={16} />, mobileHide: true },
   ];
 
   return (
-    <section className="relative flex min-h-svh flex-col overflow-hidden bg-linear-to-br from-primary-600 to-primary-800">
+    <section className="relative flex min-h-[60vh] flex-col overflow-hidden bg-linear-to-br from-primary-600 to-primary-800 lg:min-h-svh">
       {/* ── Layered overlays for depth ───────── */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_30%_0%,rgba(255,255,255,0.12)_0%,transparent_70%)]" />
       <div
@@ -65,7 +65,7 @@ export default function HeroSection() {
 
       {/* ── Main content ─────────────────────── */}
       <div className="relative z-10 flex flex-1 items-center">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-6 px-4 py-8 sm:px-6 sm:py-14 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-16">
           {/* Left: Text content */}
           <motion.div variants={container} initial="hidden" animate="show" className="text-center lg:text-left">
             {/* Brand badge */}
@@ -77,17 +77,17 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 variants={item} className="font-display text-5xl font-black leading-none text-white sm:text-6xl md:text-7xl">
+            <motion.h1 variants={item} className="font-display text-3xl font-black leading-none text-white sm:text-5xl md:text-6xl lg:text-7xl">
               {t("title")}
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p variants={item} className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg lg:mx-0">
+            <motion.p variants={item} className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/75 sm:mt-6 sm:text-base lg:mx-0 lg:text-lg">
               {t("subtitle")}
             </motion.p>
 
             {/* CTAs */}
-            <motion.div variants={item} className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+            <motion.div variants={item} className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:mt-10 lg:justify-start">
               <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                 <Link
                   href="/products"
@@ -154,10 +154,14 @@ export default function HeroSection() {
           className="mx-auto grid max-w-5xl grid-cols-2 divide-x divide-white/10 md:grid-cols-4"
         >
           {stats.map((stat, i) => (
-            <motion.div key={i} variants={statItem} className="flex flex-col items-center gap-1.5 px-4 py-6 text-center md:px-8">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white/70">{stat.icon}</span>
-              {stat.value && <span className="font-display text-3xl font-black leading-none text-white md:text-4xl">{stat.value}</span>}
-              <span className={`text-white/60 ${stat.value ? "text-xs font-semibold uppercase tracking-wide" : "mt-1 text-sm font-medium"}`}>
+            <motion.div
+              key={i}
+              variants={statItem}
+              className={`flex flex-col items-center gap-1 px-3 py-4 text-center md:gap-1.5 md:px-8 md:py-6 ${stat.mobileHide ? "hidden md:flex" : ""}`}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-white/70 md:h-8 md:w-8">{stat.icon}</span>
+              {stat.value && <span className="font-display text-2xl font-black leading-none text-white md:text-4xl">{stat.value}</span>}
+              <span className={`text-white/60 ${stat.value ? "text-[10px] font-semibold uppercase tracking-wide md:text-xs" : "mt-0.5 text-xs font-medium md:text-sm"}`}>
                 {stat.label}
               </span>
             </motion.div>

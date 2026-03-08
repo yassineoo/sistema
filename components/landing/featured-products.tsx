@@ -32,19 +32,19 @@ export default function FeaturedProducts() {
   const products = data?.results ?? [];
 
   return (
-    <section className="bg-secondary-50/90 px-4 py-20 sm:px-6 lg:px-8">
+    <section className="bg-secondary-50/90 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-12 text-center">
-          <p className="mb-2 text-xs  uppercase tracking-[0.18em] text-primary-600 font-bold">Sélection</p>
-          <h2 className="font-display text-4xl font-black text-secondary-900 sm:text-5xl">{t("title")}</h2>
-          <p className="mt-3 text-secondary-700">{t("subtitle")}</p>
+        <div className="mb-8 text-center sm:mb-12">
+          <p className="mb-1 text-xs uppercase tracking-[0.18em] text-primary-600 font-bold">Sélection</p>
+          <h2 className="font-display text-3xl font-black text-secondary-900 sm:text-4xl lg:text-5xl">{t("title")}</h2>
+          <p className="mt-2 text-sm text-secondary-700 sm:text-base">{t("subtitle")}</p>
           <div className="mx-auto mt-4 h-1 w-12 rounded-full bg-primary-600" />
         </div>
 
         {/* Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -57,7 +57,7 @@ export default function FeaturedProducts() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-80px" }}
-            className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4"
           >
             {products.map((product) => (
               <motion.div key={product.id} variants={cardVariants}>
