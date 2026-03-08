@@ -16,8 +16,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-sans);
+  --font-display: var(--font-barlow);
 
   /* Primary — Brand Green #0F9D58 */
   --color-primary-50:  #f0fdf4;
@@ -52,17 +53,46 @@
   --color-silver:  #C9CED3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #F2F2F2;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+}
+
+/* ── Global input text color ────────────────────── */
+input,
+textarea,
+select {
+  color: #2B2B2B;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #a4a4a4;
+}
+
+/* ── Global interactive cursor ──────────────────── */
+button,
+a,
+[role="button"],
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+}
+
+/* ── Display font utility ────────────────────────── */
+.font-display {
+  font-family: var(--font-barlow), 'Barlow Condensed', system-ui, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 /* ── Sidebar animations ─────────────────────────── */
@@ -121,7 +151,24 @@ body {
   to   { transform: scale(1)    translateY(0);   opacity: 1; }
 }
 
-.backdrop-animate    { animation: backdrop-in      0.2s ease both; }
-.panel-animate       { animation: panel-slide-in     0.35s cubic-bezier(0.16,1,0.3,1) both; }
-.panel-animate-rtl   { animation: panel-slide-in-rtl 0.35s cubic-bezier(0.16,1,0.3,1) both; }
-.modal-animate       { animation: modal-scale-in     0.25s cubic-bezier(0.16,1,0.3,1) both; }
+.backdrop-animate    { animation: backdrop-in          0.2s ease both; }
+.panel-animate       { animation: panel-slide-in       0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.panel-animate-rtl   { animation: panel-slide-in-rtl   0.35s cubic-bezier(0.16,1,0.3,1) both; }
+.modal-animate       { animation: modal-scale-in       0.25s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── Hero / Landing animations ──────────────────── */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes stat-count-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.float-animate   { animation: float-y       3s ease-in-out infinite; }
+.stat-animate    { animation: stat-count-in 0.6s cubic-bezier(0.16,1,0.3,1) both; }

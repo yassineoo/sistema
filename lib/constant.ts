@@ -1,13 +1,13 @@
 import axios from "axios";
 
 /**
- * Axios instance for the Ibn Badis API.
- * Auth is handled via httpOnly cookies (access_token / refresh_token).
- * No Authorization header is needed — the browser sends cookies automatically.
+ * Axios instance routed through the Next.js proxy (/api/proxy).
+ * This solves cross-origin cookie issues: the browser calls same-origin /api/proxy/*,
+ * which forwards cookies to the Django backend server-side.
+ * No withCredentials or CORS config needed — same-origin requests carry cookies automatically.
  */
 export const axiosAPI = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
-  withCredentials: true,
+  baseURL: "/api/proxy",
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,7 +21,7 @@ axiosAPI.interceptors.response.use(
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
       try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api"}/auth/refresh/`, {}, { withCredentials: true });
+        await axios.post("/api/proxy/auth/refresh/", {});
         return axiosAPI(original);
       } catch {
         // Refresh failed — redirect to login

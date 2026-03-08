@@ -195,7 +195,7 @@ export default function TrackResultPage() {
             {/* Status timeline */}
             <div className="bg-white rounded-2xl shadow-sm p-5">
               <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-5">
-                {t("timeline")}
+                {t("timeline.title")}
               </h2>
               <div className="space-y-0">
                 {ORDER_STATUSES.map((status, index) => {

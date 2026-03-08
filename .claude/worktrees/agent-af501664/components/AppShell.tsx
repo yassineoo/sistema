@@ -17,21 +17,28 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [changePwdModalOpen, setChangePwdModalOpen] = useState(false);
 
   const locale = useLocale();
-  const isRTL  = locale === "ar";
+  const isRTL = locale === "ar";
 
   const [pushBlocked, setPushBlocked] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("Notification" in window)) return;
-    if (Notification.permission === "denied") { setPushBlocked(true); return; }
+    if (Notification.permission === "denied") {
+      setPushBlocked(true);
+      return;
+    }
     subscribeToPush()
-      .then((sub) => { if (!sub) setPushBlocked(true); })
+      .then((sub) => {
+        if (!sub) setPushBlocked(true);
+      })
       .catch(console.error);
   }, []);
 
   const handleEnableNotifications = () => {
     subscribeToPush()
-      .then((sub) => { if (sub) setPushBlocked(false); })
+      .then((sub) => {
+        if (sub) setPushBlocked(false);
+      })
       .catch(console.error);
   };
 
@@ -39,19 +46,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const unread = countData?.unread_count ?? 0;
 
   const { user } = useAuth();
-  const userName = user
-    ? `${user.first_name} ${user.last_name}`.trim() || user.email
-    : "";
+  const userName = user ? `${user.first_name} ${user.last_name}`.trim() || user.email : "";
 
   return (
     <div className="flex h-screen overflow-hidden bg-accent">
-
       {/* Mobile backdrop */}
       {sidebarOpen && (
-        <div
-          className="backdrop-animate fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="backdrop-animate fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
@@ -66,9 +67,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-
         {/* Mobile top bar */}
-        <header className={`flex shrink-0 items-center justify-between border-b border-secondary-200 bg-white px-4 py-3 lg:hidden ${isRTL ? "flex-row-reverse" : ""}`}>
+        <header
+          className={`flex shrink-0 items-center justify-between border-b border-secondary-200 bg-white px-4 py-3 lg:hidden ${isRTL ? "flex-row-reverse" : ""}`}
+        >
           <button
             onClick={() => setSidebarOpen(true)}
             className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-secondary-600 transition-colors hover:bg-secondary-100"
@@ -106,20 +108,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
 
       {/* Global modals — rendered above all content */}
-      <EditProfileModal
-        open={profileModalOpen}
-        onClose={() => setProfileModalOpen(false)}
-      />
-      <ChangePasswordModal
-        open={changePwdModalOpen}
-        onClose={() => setChangePwdModalOpen(false)}
-      />
+      <EditProfileModal open={profileModalOpen} onClose={() => setProfileModalOpen(false)} />
+      <ChangePasswordModal open={changePwdModalOpen} onClose={() => setChangePwdModalOpen(false)} />
     </div>
   );
 }

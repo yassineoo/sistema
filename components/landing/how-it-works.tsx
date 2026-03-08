@@ -14,19 +14,19 @@ interface Step {
 const steps: Step[] = [
   {
     number: 1,
-    icon: <ShoppingCart size={28} className="text-primary-600" />,
+    icon: <ShoppingCart size={30} className="text-white" />,
     titleKey: "step1Title",
     descKey: "step1Desc",
   },
   {
     number: 2,
-    icon: <User size={28} className="text-primary-600" />,
+    icon: <User size={30} className="text-white" />,
     titleKey: "step2Title",
     descKey: "step2Desc",
   },
   {
     number: 3,
-    icon: <Truck size={28} className="text-primary-600" />,
+    icon: <Truck size={30} className="text-white" />,
     titleKey: "step3Title",
     descKey: "step3Desc",
   },
@@ -41,7 +41,7 @@ const containerVariants: Variants = {
 };
 
 const stepVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 28 },
   show: {
     opacity: 1,
     y: 0,
@@ -53,14 +53,18 @@ export default function HowItWorks() {
   const t = useTranslations("howItWorks");
 
   return (
-    <section className="bg-secondary-50 px-4 py-16 sm:px-6 lg:px-8">
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
+
         {/* Header */}
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-black text-secondary-900">
+        <div className="mb-14 text-center">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-primary-600">
+            Simple & Rapide
+          </p>
+          <h2 className="font-display text-4xl font-black text-secondary-900 sm:text-5xl">
             {t("title")}
           </h2>
-          <p className="mt-2 text-secondary-500">{t("subtitle")}</p>
+          <p className="mt-3 text-secondary-500">{t("subtitle")}</p>
         </div>
 
         {/* Steps */}
@@ -69,18 +73,17 @@ export default function HowItWorks() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-60px" }}
-          className="relative grid grid-cols-1 gap-8 md:grid-cols-3"
+          className="relative grid grid-cols-1 gap-10 md:grid-cols-3"
         >
-          {/* Connecting dashed line — desktop only */}
+          {/* Connecting line — desktop */}
           <div
-            className="pointer-events-none absolute left-0 right-0 top-10 hidden items-center md:flex"
+            className="pointer-events-none absolute left-0 right-0 top-12 hidden items-center md:flex"
             aria-hidden="true"
           >
-            {/* Line segment between step 1 and 2 */}
             <div className="flex-1" />
-            <div className="mx-4 flex-1 border-t-2 border-dashed border-primary-300" />
+            <div className="mx-6 flex-1 border-t-2 border-dashed border-primary-200" />
             <div className="flex-1" />
-            <div className="mx-4 flex-1 border-t-2 border-dashed border-primary-300" />
+            <div className="mx-6 flex-1 border-t-2 border-dashed border-primary-200" />
             <div className="flex-1" />
           </div>
 
@@ -90,24 +93,23 @@ export default function HowItWorks() {
               variants={stepVariants}
               className="relative flex flex-col items-center text-center"
             >
-              {/* Numbered circle */}
-              <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-primary-600 shadow-lg shadow-primary-600/30">
+              {/* Step circle */}
+              <div className="relative mb-6">
+                {/* Outer glow ring */}
+                <div className="absolute inset-0 rounded-full bg-primary-600/15 scale-125" />
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-primary-600 shadow-xl shadow-primary-600/30">
+                  {step.icon}
+                </div>
                 {/* Number badge */}
-                <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-black text-primary-600 shadow">
+                <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-black text-primary-600 shadow-md ring-2 ring-primary-100">
                   {step.number}
                 </span>
-                {step.icon && (
-                  <div className="[&>*]:text-white">{step.icon}</div>
-                )}
               </div>
 
-              {/* Title */}
-              <h3 className="text-lg font-bold text-secondary-900">
+              <h3 className="font-display text-xl font-black text-secondary-900">
                 {t(step.titleKey)}
               </h3>
-
-              {/* Description */}
-              <p className="mt-2 text-sm leading-relaxed text-secondary-500">
+              <p className="mt-2 max-w-55 text-sm leading-relaxed text-secondary-500">
                 {t(step.descKey)}
               </p>
             </motion.div>

@@ -14,7 +14,7 @@ export default function RouteGuard({ children }: RouteGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && (!user || !user.is_staff)) {
+    if (!loading && !user) {
       router.replace("/login");
     }
   }, [loading, user, router]);
@@ -32,7 +32,7 @@ export default function RouteGuard({ children }: RouteGuardProps) {
     );
   }
 
-  if (!user || !user.is_staff) {
+  if (!user) {
     return null;
   }
 

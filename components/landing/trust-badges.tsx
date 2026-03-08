@@ -16,22 +16,22 @@ interface BadgeItem {
 
 const badges: BadgeItem[] = [
   {
-    icon: <Truck size={32} className="text-primary-600" />,
+    icon: <Truck size={28} className="text-primary-600" />,
     titleKey: "freeDelivery",
     descKey: "freeDeliveryDesc",
   },
   {
-    icon: <ShieldCheck size={32} className="text-primary-600" />,
+    icon: <ShieldCheck size={28} className="text-primary-600" />,
     titleKey: "securePayment",
     descKey: "securePaymentDesc",
   },
   {
-    icon: <Zap size={32} className="text-primary-600" />,
+    icon: <Zap size={28} className="text-primary-600" />,
     titleKey: "fastProcessing",
     descKey: "fastProcessingDesc",
   },
   {
-    icon: <Star size={32} className="text-primary-600" />,
+    icon: <Star size={28} className="text-primary-600" />,
     titleKey: "qualityProducts",
     descKey: "qualityProductsDesc",
   },
@@ -41,12 +41,12 @@ const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.12 },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
     y: 0,
@@ -58,7 +58,7 @@ export default function TrustBadges() {
   const t = useTranslations("trust");
 
   return (
-    <section className="px-4 py-12 sm:px-6 lg:px-8">
+    <section className="px-4 py-14 sm:px-6 lg:px-8">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -70,15 +70,22 @@ export default function TrustBadges() {
           <motion.div
             key={badge.titleKey}
             variants={cardVariants}
-            className="flex flex-col items-center rounded-2xl border border-secondary-100 p-6 text-center backdrop-blur-sm bg-white/80 shadow-sm"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col items-center gap-3 rounded-2xl border border-secondary-100 bg-white p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-secondary-900/6"
           >
-            <div className="mb-3">{badge.icon}</div>
-            <h3 className="font-semibold text-secondary-900">
-              {t(badge.titleKey)}
-            </h3>
-            <p className="mt-1 text-sm text-secondary-500">
-              {t(badge.descKey)}
-            </p>
+            {/* Icon circle */}
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50">
+              {badge.icon}
+            </div>
+            <div>
+              <h3 className="font-bold text-secondary-900">
+                {t(badge.titleKey)}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-secondary-500">
+                {t(badge.descKey)}
+              </p>
+            </div>
           </motion.div>
         ))}
       </motion.div>

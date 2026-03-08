@@ -8,10 +8,14 @@ interface LoginCredentials {
 }
 
 export const useAuthenticate = () => {
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: LoginCredentials) => {
       const response = await axiosAPI.post("/auth/login/", data);
       return response.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["auth", "user"] });
     },
   });
 };

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Cairo } from "next/font/google";
+import { Barlow_Condensed, DM_Sans, Cairo } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
@@ -7,24 +7,29 @@ import QueryProvider from "@/components/QueryProvider";
 import { Toaster } from "sonner";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow",
   subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
+  display: "swap",
 });
 
 const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["arabic", "latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Boutique En Ligne",
-  description: "Découvrez notre boutique en ligne — produits de qualité, livraison rapide partout en Algérie.",
+  title: "Sestima Confort — Matériaux • Outils • Cuisine • Plomberie",
+  description:
+    "Sestima Confort — votre partenaire professionnel pour les matériaux de construction, outillage, équipements cuisine et plomberie. Livraison partout en Algérie.",
 };
 
 export function generateStaticParams() {
@@ -45,8 +50,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={isRTL ? "rtl" : "ltr"}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} antialiased`}
-        style={{ fontFamily: isRTL ? "var(--font-cairo), Arial, sans-serif" : undefined }}
+        className={`${dmSans.variable} ${barlowCondensed.variable} ${cairo.variable} antialiased`}
+        style={{
+          fontFamily: isRTL
+            ? "var(--font-cairo), 'Cairo', system-ui, sans-serif"
+            : "var(--font-dm-sans), 'DM Sans', system-ui, sans-serif",
+        }}
       >
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>

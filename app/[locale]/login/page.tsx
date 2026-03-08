@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, AlertCircle, Loader2, Store } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
@@ -59,10 +59,8 @@ export default function LoginPage() {
       >
         {/* Brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center mb-4">
-            <Store className="w-7 h-7 text-primary-600" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">{t("loginTitle")}</h1>
+          <img src="/logo.jpeg" alt="Sestima Confort" className="h-16 w-auto object-contain mb-4 rounded-xl" />
+          <h1 className="font-display text-2xl font-black text-gray-900">{t("loginTitle")}</h1>
           <p className="text-sm text-gray-500 mt-1">{t("loginSubtitle")}</p>
         </div>
 
@@ -70,10 +68,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
               {t("email")}
             </label>
             <input
@@ -81,10 +76,8 @@ export default function LoginPage() {
               type="email"
               autoComplete="email"
               placeholder={t("emailPlaceholder")}
-              className={`w-full px-4 py-3 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                errors.email
-                  ? "border-red-400 bg-red-50"
-                  : "border-gray-300 bg-gray-50 focus:bg-white"
+              className={`w-full px-4 text-secondary-900 py-3 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                errors.email ? "border-red-400 bg-red-50" : "border-gray-300 bg-gray-50 focus:bg-white"
               }`}
               {...register("email", {
                 required: t("fieldRequired"),
@@ -104,10 +97,7 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1.5"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
               {t("password")}
             </label>
             <div className="relative">
@@ -116,13 +106,9 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className={`w-full px-4 py-3 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                className={`w-full px-4 py-3 text-secondary-900 rounded-xl border text-sm transition focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
                   isRTL ? "pl-12" : "pr-12"
-                } ${
-                  errors.password
-                    ? "border-red-400 bg-red-50"
-                    : "border-gray-300 bg-gray-50 focus:bg-white"
-                }`}
+                } ${errors.password ? "border-red-400 bg-red-50" : "border-gray-300 bg-gray-50 focus:bg-white"}`}
                 {...register("password", {
                   required: t("fieldRequired"),
                   minLength: {
@@ -138,11 +124,7 @@ export default function LoginPage() {
                   isRTL ? "left-3" : "right-3"
                 }`}
               >
-                {showPassword ? (
-                  <EyeOff className="w-4.5 h-4.5" />
-                ) : (
-                  <Eye className="w-4.5 h-4.5" />
-                )}
+                {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
               </button>
             </div>
             {errors.password && (
@@ -160,9 +142,7 @@ export default function LoginPage() {
             whileTap={{ scale: 0.98 }}
             disabled={isPending}
             className={`w-full py-3.5 rounded-xl text-white font-semibold transition-all mt-2 ${
-              isPending
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-primary-600 hover:bg-primary-700 shadow-md hover:shadow-lg"
+              isPending ? "bg-gray-400 cursor-not-allowed" : "bg-primary-600 hover:bg-primary-700 shadow-md hover:shadow-lg"
             }`}
           >
             {isPending ? (
@@ -178,23 +158,15 @@ export default function LoginPage() {
 
         {/* Back to store */}
         <div className="mt-6 text-center">
-          <Link
-            href="/"
-            className="text-sm text-gray-400 hover:text-primary-600 transition"
-          >
+          <Link href="/" className="text-sm text-gray-400 hover:text-primary-600 transition">
             {t("backToStore")}
           </Link>
         </div>
       </motion.div>
 
       {/* Footer note */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="relative z-10 mt-6 text-white/40 text-xs"
-      >
-        © {new Date().getFullYear()} Boutique En Ligne
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="relative z-10 mt-6 text-white/40 text-xs">
+        © {new Date().getFullYear()} Sestima Confort
       </motion.p>
     </div>
   );

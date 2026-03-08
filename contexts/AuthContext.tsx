@@ -16,7 +16,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: user, isLoading: loading, error, refetch } = useGetUserInfo();
+  const { data: user, isLoading, isFetching, error, refetch } = useGetUserInfo();
+  const loading = isLoading || isFetching;
 
   return (
     <AuthContext.Provider value={{ user: user ?? null, loading, error, refetch }}>

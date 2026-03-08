@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? "https://sistema.api.logicielnuum.fr";
 
 async function proxy(req: NextRequest): Promise<NextResponse> {
   const pathname = req.nextUrl.pathname;

@@ -25,10 +25,7 @@ interface ProductFormValues {
   is_featured: boolean;
 }
 
-function buildMockProduct(
-  form: ProductFormValues,
-  categoryName: string
-): Product {
+function buildMockProduct(form: ProductFormValues, categoryName: string): Product {
   return {
     id: 0,
     name: form.name || "Nom du produit",
@@ -41,9 +38,7 @@ function buildMockProduct(
     stock: parseInt(form.stock, 10) || 0,
     is_active: form.is_active,
     is_featured: form.is_featured,
-    category: categoryName
-      ? { id: 0, name: categoryName, slug: "", is_active: true }
-      : null,
+    category: categoryName ? { id: 0, name: categoryName, slug: "", is_active: true } : null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
@@ -73,14 +68,9 @@ function ProductFormInner({
     setForm(initialValues);
   }, [initialValues.name]); // keyed on name to avoid infinite loops
 
-  const selectedCategory = categories.find(
-    (c) => String(c.id) === form.category_id
-  );
+  const selectedCategory = categories.find((c) => String(c.id) === form.category_id);
 
-  function set<K extends keyof ProductFormValues>(
-    key: K,
-    value: ProductFormValues[K]
-  ) {
+  function set<K extends keyof ProductFormValues>(key: K, value: ProductFormValues[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) {
       setErrors((prev) => {
@@ -95,10 +85,8 @@ function ProductFormInner({
     const errs: Partial<Record<keyof ProductFormValues, string>> = {};
     if (!form.name.trim()) errs.name = "Requis";
     if (!form.price || isNaN(Number(form.price))) errs.price = "Prix invalide";
-    if (form.compare_price && isNaN(Number(form.compare_price)))
-      errs.compare_price = "Prix invalide";
-    if (isNaN(parseInt(form.stock, 10)) || parseInt(form.stock, 10) < 0)
-      errs.stock = "Stock invalide";
+    if (form.compare_price && isNaN(Number(form.compare_price))) errs.compare_price = "Prix invalide";
+    if (isNaN(parseInt(form.stock, 10)) || parseInt(form.stock, 10) < 0) errs.stock = "Stock invalide";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -116,7 +104,7 @@ function ProductFormInner({
   function removeImageField(index: number) {
     set(
       "images",
-      form.images.filter((_, i) => i !== index)
+      form.images.filter((_, i) => i !== index),
     );
   }
 
@@ -132,30 +120,22 @@ function ProductFormInner({
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Name */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-            {t("name")} *
-          </label>
+          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("name")} *</label>
           <input
             type="text"
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
             placeholder={t("namePlaceholder")}
             className={`h-10 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-primary-100 ${
-              errors.name
-                ? "border-red-400 focus:border-red-400"
-                : "border-secondary-200 focus:border-primary-500"
+              errors.name ? "border-red-400 focus:border-red-400" : "border-secondary-200 focus:border-primary-500"
             }`}
           />
-          {errors.name && (
-            <p className="mt-1 text-xs text-red-500">{errors.name}</p>
-          )}
+          {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
         </div>
 
         {/* Description */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-            {t("description")}
-          </label>
+          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("description")}</label>
           <textarea
             value={form.description}
             onChange={(e) => set("description", e.target.value)}
@@ -168,9 +148,7 @@ function ProductFormInner({
         {/* Price + Compare Price */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-              {t("price")} *
-            </label>
+            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("price")} *</label>
             <input
               type="number"
               min={0}
@@ -178,19 +156,13 @@ function ProductFormInner({
               onChange={(e) => set("price", e.target.value)}
               placeholder={t("pricePlaceholder")}
               className={`h-10 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-primary-100 ${
-                errors.price
-                  ? "border-red-400 focus:border-red-400"
-                  : "border-secondary-200 focus:border-primary-500"
+                errors.price ? "border-red-400 focus:border-red-400" : "border-secondary-200 focus:border-primary-500"
               }`}
             />
-            {errors.price && (
-              <p className="mt-1 text-xs text-red-500">{errors.price}</p>
-            )}
+            {errors.price && <p className="mt-1 text-xs text-red-500">{errors.price}</p>}
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-              {t("comparePrice")}
-            </label>
+            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("comparePrice")}</label>
             <input
               type="number"
               min={0}
@@ -205,9 +177,7 @@ function ProductFormInner({
         {/* Category + Stock */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-              {t("category")}
-            </label>
+            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("category")}</label>
             <select
               value={form.category_id}
               onChange={(e) => set("category_id", e.target.value)}
@@ -222,31 +192,23 @@ function ProductFormInner({
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-              {t("stock")} *
-            </label>
+            <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("stock")} *</label>
             <input
               type="number"
               min={0}
               value={form.stock}
               onChange={(e) => set("stock", e.target.value)}
               className={`h-10 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-primary-100 ${
-                errors.stock
-                  ? "border-red-400 focus:border-red-400"
-                  : "border-secondary-200 focus:border-primary-500"
+                errors.stock ? "border-red-400 focus:border-red-400" : "border-secondary-200 focus:border-primary-500"
               }`}
             />
-            {errors.stock && (
-              <p className="mt-1 text-xs text-red-500">{errors.stock}</p>
-            )}
+            {errors.stock && <p className="mt-1 text-xs text-red-500">{errors.stock}</p>}
           </div>
         </div>
 
         {/* Images */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-            {t("images")}
-          </label>
+          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("images")}</label>
           <div className="space-y-2">
             {form.images.map((url, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -281,9 +243,7 @@ function ProductFormInner({
 
         {/* Main image */}
         <div>
-          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">
-            {t("mainImage")}
-          </label>
+          <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("mainImage")}</label>
           <input
             type="url"
             value={form.main_image}
@@ -302,9 +262,7 @@ function ProductFormInner({
               onChange={(e) => set("is_active", e.target.checked)}
               className="h-4 w-4 rounded accent-primary-600"
             />
-            <span className="text-sm font-medium text-secondary-700">
-              {t("isActive")}
-            </span>
+            <span className="text-sm font-medium text-secondary-700">{t("isActive")}</span>
           </label>
           <label className="flex cursor-pointer items-center gap-2.5">
             <input
@@ -313,9 +271,7 @@ function ProductFormInner({
               onChange={(e) => set("is_featured", e.target.checked)}
               className="h-4 w-4 rounded accent-primary-600"
             />
-            <span className="text-sm font-medium text-secondary-700">
-              {t("isFeatured")}
-            </span>
+            <span className="text-sm font-medium text-secondary-700">{t("isFeatured")}</span>
           </label>
         </div>
 
@@ -340,14 +296,9 @@ function ProductFormInner({
 
       {/* Preview */}
       <div className="space-y-3">
-        <p className="text-sm font-semibold uppercase tracking-wide text-secondary-500">
-          {t("preview")}
-        </p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-secondary-500">{t("preview")}</p>
         <div className="max-w-xs">
-          <ProductCard
-            product={buildMockProduct(form, selectedCategory?.name ?? "")}
-            compact
-          />
+          <ProductCard product={buildMockProduct(form, selectedCategory?.name ?? "")} compact />
         </div>
       </div>
     </div>
@@ -374,7 +325,7 @@ export default function EditProductPage() {
         compare_price: product.compare_price ?? "",
         category_id: product.category ? String(product.category.id) : "",
         stock: String(product.stock),
-        images: product.images.length > 0 ? product.images : [""],
+        images: product?.images?.length > 0 ? product.images : [""],
         main_image: product.main_image ?? "",
         is_active: product.is_active,
         is_featured: product.is_featured,
@@ -429,19 +380,14 @@ export default function EditProductPage() {
   return (
     <div className="p-6 space-y-6">
       {/* Back */}
-      <Link
-        href="/dashboard/products"
-        className="inline-flex items-center gap-2 text-sm font-medium text-secondary-500 hover:text-primary-600"
-      >
+      <Link href="/dashboard/products" className="inline-flex items-center gap-2 text-sm font-medium text-secondary-500 hover:text-primary-600">
         <ArrowLeft size={16} />
         Retour aux produits
       </Link>
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-secondary-900">
-          {t("editTitle")}
-        </h1>
+        <h1 className="text-2xl font-bold text-secondary-900">{t("editTitle")}</h1>
       </div>
 
       <motion.div
@@ -449,12 +395,7 @@ export default function EditProductPage() {
         animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl border border-secondary-100 bg-white p-6 shadow-sm"
       >
-        <ProductFormInner
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          isPending={updateProduct.isPending}
-          submitLabel={t("save")}
-        />
+        <ProductFormInner initialValues={initialValues} onSubmit={handleSubmit} isPending={updateProduct.isPending} submitLabel={t("save")} />
       </motion.div>
     </div>
   );

@@ -16,7 +16,7 @@ interface LoginFormValues {
 export default function LoginPage() {
   const router = useRouter();
   const locale = useLocale();
-  const isRTL  = locale === "ar";
+  const isRTL = locale === "ar";
 
   const {
     register,
@@ -45,7 +45,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4 bg-[#faf8f8]">
-
       {/* Red/warm gradient effects — brand primary */}
       <div className="absolute top-0 left-0 w-[80vw] h-[100vh] bg-linear-to-br from-primary-500 via-primary-400 to-transparent opacity-30 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute top-0 right-0 w-[80vw] h-[100vh] bg-linear-to-bl from-primary-700 via-primary-500 to-transparent opacity-30 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
@@ -86,7 +85,7 @@ export default function LoginPage() {
             <input
               id="email"
               type="email"
-              className="w-full px-4 py-3 rounded-xl border-0 bg-white/80 backdrop-blur-sm text-secondary-900 placeholder:text-secondary-400 focus:bg-white focus:ring-2 focus:ring-primary-400 focus:outline-none transition-all shadow-sm"
+              className="w-full px-4 py-3 rounded-xl border-0 bg-white/80 backdrop-blur-sm text-secondary-900 placeholder:text-secondary-700 focus:bg-white focus:ring-2 focus:ring-primary-400 focus:outline-none transition-all shadow-sm"
               placeholder="nom@ibnbadis.dz"
               {...register("email", {
                 required: "Ce champ est requis",
@@ -128,11 +127,7 @@ export default function LoginPage() {
                 onClick={() => setShowPassword((prev) => !prev)}
                 className={`absolute top-1/2 -translate-y-1/2 hover:bg-secondary-100 rounded-full p-1.5 transition-colors ${isRTL ? "left-3" : "right-3"}`}
               >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5 text-secondary-400" />
-                ) : (
-                  <Eye className="w-5 h-5 text-secondary-400" />
-                )}
+                {showPassword ? <EyeOff className="w-5 h-5 text-secondary-400" /> : <Eye className="w-5 h-5 text-secondary-400" />}
               </button>
             </div>
             {errors.password && (
@@ -184,9 +179,7 @@ export default function LoginPage() {
         </motion.form>
 
         {/* Footer */}
-        <p className="mt-8 text-center text-xs text-secondary-300">
-          © 2026 Ibn Badis — Imprimerie
-        </p>
+        <p className="mt-8 text-center text-xs text-secondary-300">© 2026 Ibn Badis — Imprimerie</p>
       </motion.div>
     </div>
   );

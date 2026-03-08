@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LanguageSwitcher from "@/components/layouts/language-switcher";
 
@@ -17,20 +17,21 @@ export default function PublicNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
   const navLinks = [
     { href: "/", labelKey: "home" as const },
-    { href: "/products", labelKey: "products" as const },
-    { href: "/track", labelKey: "track" as const },
+    { href: "/products", labelKey: "promotions" as const },
+    { href: "/about", labelKey: "about" as const },
+    { href: "/categories", labelKey: "categories" as const },
+    { href: "/contact", labelKey: "contact" as const },
   ];
 
   function isActive(href: string) {
@@ -42,27 +43,35 @@ export default function PublicNavbar() {
     <>
       <header
         className={`
-          sticky top-0 z-50 w-full bg-white transition-shadow duration-300
-          ${scrolled ? "shadow-md" : "shadow-none border-b border-gray-100"}
+          sticky top-0 z-50 w-full transition-all duration-300
+          ${
+            scrolled
+              ? "bg-white/95 shadow-lg shadow-secondary-900/8 backdrop-blur-md"
+              : "bg-white border-b border-secondary-100"
+          }
         `}
         dir={isRTL ? "rtl" : "ltr"}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Logo */}
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+
+          {/* ── Logo ─────────────────────────────────── */}
           <Link
             href="/"
-            className={`flex items-center gap-2 shrink-0 ${isRTL ? "flex-row-reverse" : ""}`}
+            className={`flex items-center gap-3 shrink-0 group ${isRTL ? "flex-row-reverse" : ""}`}
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600">
-              <ShoppingBag size={18} className="text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-wide text-secondary-900">
-              BOUT
-              <span className="text-primary-600">IQUE</span>
+            {/* Logo image */}
+            <img
+              src="/logo.jpeg"
+              alt="Sestima Confort"
+              className="h-10 w-auto rounded-xl object-contain transition-transform duration-200 group-hover:scale-105"
+            />
+            {/* Tagline — desktop only */}
+            <span className="mt-0.5 hidden text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-secondary-400 sm:block">
+              {t("tagline")}
             </span>
           </Link>
 
-          {/* Desktop nav links */}
+          {/* ── Desktop nav links ─────────────────────── */}
           <nav
             className={`hidden md:flex items-center gap-1 ${isRTL ? "flex-row-reverse" : ""}`}
             aria-label="Main navigation"
@@ -72,46 +81,58 @@ export default function PublicNavbar() {
                 key={href}
                 href={href}
                 className={`
-                  rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200
+                  relative rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200
                   ${
                     isActive(href)
-                      ? "bg-primary-50 text-primary-600 font-semibold"
-                      : "text-secondary-600 hover:bg-gray-100 hover:text-secondary-900"
+                      ? "text-primary-600"
+                      : "text-secondary-600 hover:text-secondary-900 hover:bg-secondary-50"
                   }
                 `}
               >
+                {isActive(href) && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute inset-0 rounded-lg bg-primary-50"
+                    style={{ zIndex: -1 }}
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                  />
+                )}
                 {t(labelKey)}
               </Link>
             ))}
           </nav>
 
-          {/* Desktop right actions */}
+          {/* ── Desktop right actions ─────────────────── */}
           <div
             className={`hidden md:flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
           >
             <LanguageSwitcher />
-            <Link
-              href="/login"
-              className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 hover:bg-primary-700 active:scale-95"
-            >
-              {t("login")}
-            </Link>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* ── Mobile hamburger ──────────────────────── */}
           <button
             type="button"
             onClick={() => setMobileOpen((o) => !o)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-secondary-600 transition-colors hover:bg-gray-100 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-secondary-600 transition-colors hover:bg-secondary-50 md:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={mobileOpen ? "close" : "open"}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+              </motion.div>
+            </AnimatePresence>
           </button>
         </div>
       </header>
 
-      {/* Mobile drawer */}
+      {/* ── Mobile drawer ─────────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -122,46 +143,54 @@ export default function PublicNavbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-secondary-900/30 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
             {/* Drawer panel */}
             <motion.div
               key="drawer"
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed left-0 right-0 top-16 z-50 border-b border-gray-200 bg-white px-4 pb-6 pt-4 shadow-lg md:hidden"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="fixed left-0 right-0 top-[73px] z-50 bg-white shadow-xl md:hidden"
               dir={isRTL ? "rtl" : "ltr"}
             >
-              <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
-                {navLinks.map(({ href, labelKey }) => (
-                  <Link
+              {/* Nav links */}
+              <nav className="flex flex-col px-4 pt-4 pb-2" aria-label="Mobile navigation">
+                {navLinks.map(({ href, labelKey }, i) => (
+                  <motion.div
                     key={href}
-                    href={href}
-                    className={`
-                      rounded-xl px-4 py-3 text-base font-medium transition-all duration-150
-                      ${
-                        isActive(href)
-                          ? "bg-primary-50 text-primary-600 font-semibold"
-                          : "text-secondary-700 hover:bg-gray-100"
-                      }
-                    `}
+                    initial={{ opacity: 0, x: isRTL ? 12 : -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.2 }}
                   >
-                    {t(labelKey)}
-                  </Link>
+                    <Link
+                      href={href}
+                      className={`
+                        flex items-center rounded-xl px-4 py-3.5 text-base font-semibold transition-all duration-150
+                        ${
+                          isActive(href)
+                            ? "bg-primary-50 text-primary-600"
+                            : "text-secondary-700 hover:bg-secondary-50 hover:text-secondary-900"
+                        }
+                      `}
+                    >
+                      {t(labelKey)}
+                    </Link>
+                  </motion.div>
                 ))}
               </nav>
 
-              <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4">
+              {/* Bottom actions */}
+              <div className="flex flex-col gap-3 border-t border-secondary-100 px-4 py-4">
                 <div className={`flex items-center ${isRTL ? "justify-end" : "justify-start"}`}>
                   <LanguageSwitcher />
                 </div>
                 <Link
                   href="/login"
-                  className="w-full rounded-xl bg-primary-600 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+                  className="w-full rounded-xl border border-secondary-200 py-3 text-center text-sm font-medium text-secondary-500 transition-colors hover:bg-secondary-50"
                 >
                   {t("login")}
                 </Link>
