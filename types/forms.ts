@@ -52,14 +52,18 @@ export const productSchema = z.object({
     .regex(/^\d+(\.\d{1,2})?$/)
     .optional()
     .or(z.literal("")),
-  images: z.array(z.string()).default([]),
-  main_image: z.string().optional().or(z.literal("")),
   stock: z.number().int().min(0),
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),
-  category_id: z.number().int().nullable(),
+  subcategory_id: z.number().int().nullable(),
 });
 export type ProductFormData = z.infer<typeof productSchema>;
+
+export const catalogSchema = z.object({
+  name: z.string().min(2).max(255),
+  pdf_drive_link: z.string().url("Lien invalide"),
+});
+export type CatalogFormData = z.infer<typeof catalogSchema>;
 
 export const deliveryPricingSchema = z.object({
   home_delivery: z.string().nullable(),

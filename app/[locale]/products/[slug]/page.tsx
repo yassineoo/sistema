@@ -104,7 +104,7 @@ export default function ProductDetailPage() {
   const { mutateAsync: placeOrder, isPending } = usePlaceOrder();
 
   const { data: relatedData } = useGetPublicProducts(
-    "", 1, product?.category?.slug ?? "", "", "", "", "-created_at"
+    "", 1, String(product?.subcategory?.category?.id ?? ""), "", "", "", "-created_at"
   );
   const relatedProducts = (relatedData?.results ?? []).filter((p) => p.slug !== slug).slice(0, 4);
 
@@ -126,7 +126,12 @@ export default function ProductDetailPage() {
   const total    = subtotal + (deliveryPrice ?? 0);
 
   const allImages = product
-    ? [...(product.main_image ? [product.main_image] : []), ...product.images.filter((img) => img !== product.main_image)]
+    ? [
+        ...(product.main_image ? [product.main_image] : []),
+        ...product.gallery
+          .map((g) => g.image)
+          .filter((img) => img !== product.main_image),
+      ]
     : [];
 
   const hasDiscount    = product?.compare_price && parseFloat(product.compare_price) > parseFloat(product.price ?? "0");
@@ -224,9 +229,9 @@ export default function ProductDetailPage() {
                   Retour aux produits
                 </Link>
                 <div className="mb-2 flex flex-wrap items-center gap-3">
-                  {product.category && (
+                  {product.subcategory && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-700">
-                      <Tag size={11} />{product.category.name}
+                      <Tag size={11} />{product.subcategory.name}
                     </span>
                   )}
                   {product.is_featured && (

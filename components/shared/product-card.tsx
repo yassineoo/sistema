@@ -18,7 +18,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const t = useTranslations("products");
 
-  const imageSrc = product.main_image ?? product.images[0] ?? null;
+  const imageSrc = product.main_image ?? product.gallery[0]?.image ?? null;
   const isOutOfStock = product.stock === 0;
   const hasPromo = Boolean(product.compare_price && Number(product.compare_price) > Number(product.price));
   const nameInitial = product.name.charAt(0).toUpperCase();
@@ -87,9 +87,9 @@ export default function ProductCard({
         {/* ── Body ──────────────────────────────────── */}
         <div className="flex flex-1 flex-col gap-1.5 p-3 sm:gap-2 sm:p-4">
           {/* Category chip */}
-          {product.category && (
+          {product.subcategory && (
             <span className="inline-block w-fit rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold text-primary-700 sm:text-xs">
-              {product.category.name}
+              {product.subcategory.name}
             </span>
           )}
 

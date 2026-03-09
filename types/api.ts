@@ -1,13 +1,31 @@
 // ── E-Commerce API Types ─────────────────────────────────────────────────────
 
-export interface Category {
+export interface CategoryBase {
   id: number;
   name: string;
   slug: string;
-  description: string | null;
+  image: string | null;
   is_active: boolean;
+}
+
+export interface Subcategory {
+  id: number;
+  name: string;
+  slug: string;
+  category: CategoryBase;
+}
+
+export interface Category extends CategoryBase {
+  description: string | null;
+  subcategories: Subcategory[];
   created_at: string;
   updated_at: string;
+}
+
+export interface GalleryImage {
+  id: number;
+  image: string;
+  order: number;
 }
 
 export interface Product {
@@ -17,12 +35,12 @@ export interface Product {
   description: string | null;
   price: string;
   compare_price: string | null;
-  images: string[];
+  gallery: GalleryImage[];
   main_image: string | null;
   stock: number;
   is_active: boolean;
   is_featured: boolean;
-  category: Pick<Category, "id" | "name" | "slug" | "is_active"> | null;
+  subcategory: Subcategory | null;
   created_at: string;
   updated_at: string;
 }
@@ -124,4 +142,13 @@ export interface CreateOrderPayload {
 
 export interface TrackOrderResponse extends Order {
   timeline?: { status: OrderStatus; timestamp: string }[];
+}
+
+export interface Catalog {
+  id: number;
+  name: string;
+  pdf_drive_link: string;
+  cover_image: string | null;
+  created_at: string;
+  updated_at: string;
 }

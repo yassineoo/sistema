@@ -5,6 +5,7 @@ import TrustBadges from "@/components/landing/trust-badges";
 import CategoriesShowcase from "@/components/landing/categories-showcase";
 import FeaturedProducts from "@/components/landing/featured-products";
 import HowItWorks from "@/components/landing/how-it-works";
+import CatalogsShowcase from "@/components/landing/catalogs-showcase";
 import Footer from "@/components/layouts/footer";
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <FeaturedProducts />
       <TrustBadges />
       <CategoriesShowcase />
+      <CatalogsShowcase />
       <HowItWorks />
       <Footer />
     </main>

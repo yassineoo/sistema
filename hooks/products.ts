@@ -7,34 +7,37 @@ import type { PaginatedResponse, Product, Category } from "@/types/api";
 export const useGetPublicProducts = (
   search: string,
   page: number,
-  categorySlug: string,
+  categoryId: string,
   minPrice: string,
   maxPrice: string,
   isFeatured: string,
-  ordering: string
+  ordering: string,
+  subcategoryId?: string
 ) => {
   return useQuery({
     queryKey: [
       "publicProducts",
       search,
       page,
-      categorySlug,
+      categoryId,
       minPrice,
       maxPrice,
       isFeatured,
       ordering,
+      subcategoryId,
     ],
     queryFn: async () => {
       const { data } = await axiosAPI.get<PaginatedResponse<Product>>(
         "api/products/",
         {
           params: {
-            search,
+            search: search || undefined,
             page,
-            category_slug: categorySlug,
-            min_price: minPrice,
-            max_price: maxPrice,
-            is_featured: isFeatured,
+            category_id: categoryId || undefined,
+            subcategory_id: subcategoryId || undefined,
+            min_price: minPrice || undefined,
+            max_price: maxPrice || undefined,
+            is_featured: isFeatured || undefined,
             ordering,
           },
         }
@@ -95,10 +98,10 @@ export const useGetAdminProducts = (
         "api/products/",
         {
           params: {
-            search,
+            search: search || undefined,
             page,
-            category: categoryId,
-            is_active: isActive,
+            category_id: categoryId || undefined,
+            is_active: isActive || undefined,
             ordering,
           },
         }
@@ -108,15 +111,30 @@ export const useGetAdminProducts = (
   });
 };
 
+export const useGetAdminProductById = (id: number) => {
+  return useQuery({
+    queryKey: ["adminProduct", id],
+    queryFn: async () => {
+      const { data } = await axiosAPI.get<Product>(`api/products/${id}/`);
+      return data;
+    },
+    enabled: id > 0,
+  });
+};
+
 export const useCreateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: FormData | Partial<Product>) => {
-      const { data } = await axiosAPI.post<Product>("api/products/", payload);
+    mutationFn: async (payload: FormData) => {
+      const { data } = await axiosAPI.post<Product>("api/products/", payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return data;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["adminProducts"] });
+      qc.invalidateQueries({ queryKey: ["publicProducts"] });
+      qc.invalidateQueries({ queryKey: ["featuredProducts"] });
     },
   });
 };
@@ -129,17 +147,20 @@ export const useUpdateProduct = () => {
       payload,
     }: {
       id: number;
-      payload: FormData | Partial<Product>;
+      payload: FormData;
     }) => {
       const { data } = await axiosAPI.patch<Product>(
         `api/products/${id}/`,
-        payload
+        payload,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       return data;
     },
     onSuccess: (_data, { id }) => {
       qc.invalidateQueries({ queryKey: ["adminProducts"] });
-      qc.invalidateQueries({ queryKey: ["product", String(id)] });
+      qc.invalidateQueries({ queryKey: ["adminProduct", id] });
+      qc.invalidateQueries({ queryKey: ["publicProducts"] });
+      qc.invalidateQueries({ queryKey: ["featuredProducts"] });
     },
   });
 };
@@ -152,6 +173,7 @@ export const useDeleteProduct = () => {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["adminProducts"] });
+      qc.invalidateQueries({ queryKey: ["publicProducts"] });
     },
   });
 };
@@ -160,8 +182,10 @@ export const useToggleProductActive = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, is_active }: { id: number; is_active: boolean }) => {
-      const { data } = await axiosAPI.patch<Product>(`api/products/${id}/`, {
-        is_active,
+      const fd = new FormData();
+      fd.append("is_active", String(is_active));
+      const { data } = await axiosAPI.patch<Product>(`api/products/${id}/`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return data;
     },
@@ -181,8 +205,10 @@ export const useToggleProductFeatured = () => {
       id: number;
       is_featured: boolean;
     }) => {
-      const { data } = await axiosAPI.patch<Product>(`api/products/${id}/`, {
-        is_featured,
+      const fd = new FormData();
+      fd.append("is_featured", String(is_featured));
+      const { data } = await axiosAPI.patch<Product>(`api/products/${id}/`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return data;
     },
@@ -204,7 +230,7 @@ export const useUpdateProductStock = () => {
     },
     onSuccess: (_data, { id }) => {
       qc.invalidateQueries({ queryKey: ["adminProducts"] });
-      qc.invalidateQueries({ queryKey: ["product", String(id)] });
+      qc.invalidateQueries({ queryKey: ["adminProduct", id] });
     },
   });
 };

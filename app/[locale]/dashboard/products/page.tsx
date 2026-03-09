@@ -280,9 +280,9 @@ export default function ProductsPage() {
                     {/* Name + thumbnail */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        {product.main_image || product.images[0] ? (
+                        {product.main_image || product.gallery[0]?.image ? (
                           <img
-                            src={product.main_image ?? product.images[0]}
+                            src={product.main_image ?? product.gallery[0]?.image}
                             alt={product.name}
                             className="h-9 w-9 rounded-lg object-cover"
                           />
@@ -299,10 +299,15 @@ export default function ProductsPage() {
 
                     {/* Category */}
                     <td className="px-4 py-3">
-                      {product.category ? (
-                        <span className="inline-flex rounded-full bg-secondary-100 px-2.5 py-0.5 text-xs font-medium text-secondary-600">
-                          {product.category.name}
-                        </span>
+                      {product.subcategory ? (
+                        <div className="flex flex-col gap-0.5">
+                          <span className="inline-flex rounded-full bg-secondary-100 px-2.5 py-0.5 text-xs font-medium text-secondary-600">
+                            {product.subcategory.category.name}
+                          </span>
+                          <span className="text-[11px] text-secondary-400">
+                            {product.subcategory.name}
+                          </span>
+                        </div>
                       ) : (
                         <span className="text-secondary-300">—</span>
                       )}

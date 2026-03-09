@@ -101,7 +101,7 @@ export default function StepProducts({
         const newItem: CartItem = {
           product_id: product.id,
           product_name: product.name,
-          product_image: product.main_image ?? product.images[0] ?? null,
+          product_image: product.main_image ?? product.gallery[0]?.image ?? null,
           unit_price: product.price,
           quantity: 1,
           stock: product.stock,
@@ -184,7 +184,7 @@ export default function StepProducts({
               const cartQty = getCartQty(product.id);
               const outOfStock = product.stock === 0;
               const atMax = cartQty >= product.stock;
-              const imageSrc = product.main_image ?? product.images[0] ?? null;
+              const imageSrc = product.main_image ?? product.gallery[0]?.image ?? null;
 
               return (
                 <motion.li

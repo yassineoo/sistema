@@ -30,8 +30,8 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [categorySlug, setCategorySlug] = useState(
-    searchParams.get("category_slug") ?? ""
+  const [categoryId, setCategoryId] = useState(
+    searchParams.get("category_id") ?? ""
   );
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -50,7 +50,7 @@ export default function ProductsPage() {
   const { data, isLoading } = useGetPublicProducts(
     debouncedSearch,
     page,
-    categorySlug,
+    categoryId,
     minPrice,
     maxPrice,
     "",
@@ -79,7 +79,7 @@ export default function ProductsPage() {
   const handleClearFilters = () => {
     setSearch("");
     setDebouncedSearch("");
-    setCategorySlug("");
+    setCategoryId("");
     setMinPrice("");
     setMaxPrice("");
     setOrdering("-created_at");
@@ -87,7 +87,7 @@ export default function ProductsPage() {
   };
 
   const hasActiveFilters =
-    debouncedSearch || categorySlug || minPrice || maxPrice || ordering !== "-created_at";
+    debouncedSearch || categoryId || minPrice || maxPrice || ordering !== "-created_at";
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50" dir={isRTL ? "rtl" : "ltr"}>
@@ -137,16 +137,16 @@ export default function ProductsPage() {
 
             {/* Category select */}
             <select
-              value={categorySlug}
+              value={categoryId}
               onChange={(e) => {
-                setCategorySlug(e.target.value);
+                setCategoryId(e.target.value);
                 setPage(1);
               }}
               className="py-2.5 px-4 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition min-w-[160px]"
             >
               <option value="">{t("allCategories")}</option>
               {categories.map((cat) => (
-                <option key={cat.slug} value={cat.slug}>
+                <option key={cat.id} value={String(cat.id)}>
                   {cat.name}
                 </option>
               ))}

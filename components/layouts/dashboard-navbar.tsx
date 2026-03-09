@@ -14,6 +14,7 @@ import {
   X,
   LogOut,
   ChevronRight,
+  BookOpen,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,6 +34,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: "orders", href: "/dashboard/orders", icon: ClipboardList, translationKey: "orders" },
   { key: "products", href: "/dashboard/products", icon: Package, translationKey: "products" },
   { key: "categories", href: "/dashboard/categories", icon: Tag, translationKey: "categories" },
+  { key: "catalogs", href: "/dashboard/catalogs", icon: BookOpen, translationKey: "catalogs" },
   { key: "delivery", href: "/dashboard/delivery", icon: Truck, translationKey: "delivery" },
   { key: "settings", href: "/dashboard/settings", icon: Settings, translationKey: "settings" },
 ];
