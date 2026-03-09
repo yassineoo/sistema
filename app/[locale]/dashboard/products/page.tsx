@@ -6,13 +6,7 @@ import { motion } from "framer-motion";
 import { Search, Plus, Edit2, Trash2, Package } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
-import {
-  useGetAdminProducts,
-  useDeleteProduct,
-  useToggleProductActive,
-  useToggleProductFeatured,
-  useUpdateProductStock,
-} from "@/hooks/products";
+import { useGetAdminProducts, useDeleteProduct, useToggleProductActive, useToggleProductFeatured, useUpdateProductStock } from "@/hooks/products";
 import { useGetPublicCategories } from "@/hooks/products";
 import { TableSkeleton } from "@/components/shared/loading-skeleton";
 import Pagination from "@/components/shared/pagination";
@@ -65,9 +59,7 @@ function DeleteDialog({ onConfirm, onCancel, loading, t }: DeleteDialogProps) {
         animate={{ scale: 1, opacity: 1 }}
         className="mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
       >
-        <h3 className="text-base font-semibold text-secondary-900">
-          {t("deleteConfirm")}
-        </h3>
+        <h3 className="text-base font-semibold text-secondary-900">{t("deleteConfirm")}</h3>
         <div className="mt-5 flex justify-end gap-3">
           <button
             type="button"
@@ -102,13 +94,7 @@ export default function ProductsPage() {
   const [editingStockId, setEditingStockId] = useState<number | null>(null);
   const [stockValue, setStockValue] = useState("");
 
-  const { data, isLoading, isError } = useGetAdminProducts(
-    search,
-    page,
-    categoryId,
-    isActive,
-    "-created_at"
-  );
+  const { data, isLoading, isError } = useGetAdminProducts(search, page, categoryId, isActive, "-created_at");
   const { data: categoriesData } = useGetPublicCategories();
 
   const deleteProduct = useDeleteProduct();
@@ -180,14 +166,14 @@ export default function ProductsPage() {
       <div className="flex flex-wrap gap-2 rounded-2xl border border-secondary-100 bg-white p-4 shadow-sm">
         {/* Search */}
         <div className="relative min-w-[200px] flex-1">
-          <Search
-            size={15}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400"
-          />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" />
           <input
             type="text"
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder={t("search")}
             className="h-9 w-full rounded-lg border border-secondary-200 pl-9 pr-3 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
@@ -196,7 +182,10 @@ export default function ProductsPage() {
         {/* Category */}
         <select
           value={categoryId}
-          onChange={(e) => { setCategoryId(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setCategoryId(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-lg border border-secondary-200 px-3 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         >
           <option value="">{t("filterAll")}</option>
@@ -210,7 +199,10 @@ export default function ProductsPage() {
         {/* Active filter */}
         <select
           value={isActive}
-          onChange={(e) => { setIsActive(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setIsActive(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-lg border border-secondary-200 px-3 text-sm outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
         >
           <option value="">{t("filterAll")}</option>
@@ -225,27 +217,13 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead className="border-b border-secondary-100 bg-secondary-50/50">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold text-secondary-500">
-                  {t("name")}
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-secondary-500">
-                  {t("category")}
-                </th>
-                <th className="px-4 py-3 text-right font-semibold text-secondary-500">
-                  {t("price")}
-                </th>
-                <th className="px-4 py-3 text-right font-semibold text-secondary-500">
-                  {t("stock")}
-                </th>
-                <th className="px-4 py-3 text-center font-semibold text-secondary-500">
-                  {t("status")}
-                </th>
-                <th className="px-4 py-3 text-center font-semibold text-secondary-500">
-                  {t("featured")}
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-secondary-500">
-                  {t("actions")}
-                </th>
+                <th className="px-4 py-3 text-left font-semibold text-secondary-500">{t("name")}</th>
+                <th className="px-4 py-3 text-left font-semibold text-secondary-500">{t("category")}</th>
+                <th className="px-4 py-3 text-right font-semibold text-secondary-500">{t("price")}</th>
+                <th className="px-4 py-3 text-right font-semibold text-secondary-500">{t("stock")}</th>
+                <th className="px-4 py-3 text-center font-semibold text-secondary-500">{t("status")}</th>
+                <th className="px-4 py-3 text-center font-semibold text-secondary-500">{t("featured")}</th>
+                <th className="px-4 py-3 text-left font-semibold text-secondary-500">{t("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-secondary-50">
@@ -253,37 +231,26 @@ export default function ProductsPage() {
                 <TableSkeleton rows={8} cols={7} />
               ) : isError ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-4 py-8 text-center text-sm text-red-500"
-                  >
+                  <td colSpan={7} className="px-4 py-8 text-center text-sm text-red-500">
                     {t("errorLoading")}
                   </td>
                 </tr>
               ) : products.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-4 py-8 text-center text-sm text-secondary-400"
-                  >
+                  <td colSpan={7} className="px-4 py-8 text-center text-sm text-secondary-400">
                     {t("noProducts")}
                   </td>
                 </tr>
               ) : (
                 products.map((product) => (
-                  <motion.tr
-                    key={product.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="hover:bg-secondary-50/50"
-                  >
+                  <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="hover:bg-secondary-50/50">
                     {/* Name + thumbnail */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        {product.main_image || product.gallery[0]?.image ? (
+                        {product?.main_image || product?.gallery?.[0]?.image ? (
                           <img
-                            src={product.main_image ?? product.gallery[0]?.image}
-                            alt={product.name}
+                            src={product?.main_image ?? product?.gallery?.[0]?.image}
+                            alt={product?.name}
                             className="h-9 w-9 rounded-lg object-cover"
                           />
                         ) : (
@@ -291,12 +258,9 @@ export default function ProductsPage() {
                             <Package size={16} />
                           </div>
                         )}
-                        <span className="max-w-[160px] truncate font-medium text-secondary-900">
-                          {product.name}
-                        </span>
+                        <span className="max-w-[160px] truncate font-medium text-secondary-900">{product?.name}</span>
                       </div>
                     </td>
-
                     {/* Category */}
                     <td className="px-4 py-3">
                       {product.subcategory ? (
@@ -304,9 +268,7 @@ export default function ProductsPage() {
                           <span className="inline-flex rounded-full bg-secondary-100 px-2.5 py-0.5 text-xs font-medium text-secondary-600">
                             {product.subcategory.category.name}
                           </span>
-                          <span className="text-[11px] text-secondary-400">
-                            {product.subcategory.name}
-                          </span>
+                          <span className="text-[11px] text-secondary-400">{product.subcategory.name}</span>
                         </div>
                       ) : (
                         <span className="text-secondary-300">—</span>
@@ -315,13 +277,9 @@ export default function ProductsPage() {
 
                     {/* Price */}
                     <td className="px-4 py-3 text-right">
-                      <span className="font-semibold text-primary-600">
-                        {formatCurrency(product.price)}
-                      </span>
+                      <span className="font-semibold text-primary-600">{formatCurrency(product.price)}</span>
                       {product.compare_price && (
-                        <span className="ml-1 text-xs text-secondary-400 line-through">
-                          {formatCurrency(product.compare_price)}
-                        </span>
+                        <span className="ml-1 text-xs text-secondary-400 line-through">{formatCurrency(product.compare_price)}</span>
                       )}
                     </td>
 
@@ -347,7 +305,10 @@ export default function ProductsPage() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => { setEditingStockId(null); setStockValue(""); }}
+                            onClick={() => {
+                              setEditingStockId(null);
+                              setStockValue("");
+                            }}
                             className="rounded-lg border border-secondary-200 px-2 py-1 text-xs text-secondary-500 hover:bg-secondary-50"
                           >
                             ✕
@@ -361,9 +322,7 @@ export default function ProductsPage() {
                             setStockValue(String(product.stock));
                           }}
                           className={`rounded-full px-2.5 py-0.5 text-xs font-semibold hover:opacity-80 ${
-                            product.stock === 0
-                              ? "bg-red-100 text-red-600"
-                              : "bg-emerald-100 text-emerald-700"
+                            product.stock === 0 ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700"
                           }`}
                         >
                           {product.stock}
@@ -375,9 +334,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-3 text-center">
                       <ToggleSwitch
                         checked={product.is_active}
-                        onChange={() =>
-                          handleToggleActive(product.id, product.is_active)
-                        }
+                        onChange={() => handleToggleActive(product.id, product.is_active)}
                         disabled={toggleActive.isPending}
                       />
                     </td>
@@ -386,9 +343,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-3 text-center">
                       <ToggleSwitch
                         checked={product.is_featured}
-                        onChange={() =>
-                          handleToggleFeatured(product.id, product.is_featured)
-                        }
+                        onChange={() => handleToggleFeatured(product.id, product.is_featured)}
                         disabled={toggleFeatured.isPending}
                       />
                     </td>
@@ -420,24 +375,10 @@ export default function ProductsPage() {
       </div>
 
       {/* Pagination */}
-      {total > PAGE_SIZE && (
-        <Pagination
-          page={page}
-          total={total}
-          pageSize={PAGE_SIZE}
-          onPageChange={setPage}
-        />
-      )}
+      {total > PAGE_SIZE && <Pagination page={page} total={total} pageSize={PAGE_SIZE} onPageChange={setPage} />}
 
       {/* Delete confirmation */}
-      {deleteId != null && (
-        <DeleteDialog
-          onConfirm={handleDelete}
-          onCancel={() => setDeleteId(null)}
-          loading={deleteProduct.isPending}
-          t={t}
-        />
-      )}
+      {deleteId != null && <DeleteDialog onConfirm={handleDelete} onCancel={() => setDeleteId(null)} loading={deleteProduct.isPending} t={t} />}
     </div>
   );
 }

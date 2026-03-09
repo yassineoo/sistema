@@ -29,11 +29,7 @@ interface ProductFormValues {
   is_featured: boolean;
 }
 
-function buildMockProduct(
-  form: ProductFormValues,
-  subcategoryName: string,
-  categoryName: string
-): Product {
+function buildMockProduct(form: ProductFormValues, subcategoryName: string, categoryName: string): Product {
   return {
     id: 0,
     name: form.name || "Nom du produit",
@@ -124,7 +120,7 @@ export default function EditProductPage() {
         main_image_file: null,
         main_image_preview: product.main_image ?? "",
         gallery_files: [],
-        gallery_existing: product.gallery.map((g) => ({ id: g.id, image: g.image })),
+        gallery_existing: product?.gallery.map((g) => ({ id: g.id, image: g.image })),
         delete_gallery_ids: [],
         is_active: product.is_active,
         is_featured: product.is_featured,
@@ -139,7 +135,12 @@ export default function EditProductPage() {
 
   function set<K extends keyof ProductFormValues>(key: K, value: ProductFormValues[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) setErrors((prev) => { const n = { ...prev }; delete n[key]; return n; });
+    if (errors[key])
+      setErrors((prev) => {
+        const n = { ...prev };
+        delete n[key];
+        return n;
+      });
   }
 
   function handleCategoryChange(catId: string) {
@@ -167,7 +168,10 @@ export default function EditProductPage() {
   }
 
   function removeGalleryFile(index: number) {
-    set("gallery_files", form.gallery_files.filter((_, i) => i !== index));
+    set(
+      "gallery_files",
+      form.gallery_files.filter((_, i) => i !== index),
+    );
   }
 
   function removeExistingGallery(galleryId: number) {
@@ -210,10 +214,7 @@ export default function EditProductPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <Link
-        href="/dashboard/products"
-        className="inline-flex items-center gap-2 text-sm font-medium text-secondary-500 hover:text-primary-600"
-      >
+      <Link href="/dashboard/products" className="inline-flex items-center gap-2 text-sm font-medium text-secondary-500 hover:text-primary-600">
         <ArrowLeft size={16} />
         Retour aux produits
       </Link>
@@ -228,7 +229,6 @@ export default function EditProductPage() {
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           {/* ── Form ── */}
           <form onSubmit={handleSubmit} className="space-y-5">
-
             {/* Name */}
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("name")} *</label>
@@ -259,7 +259,8 @@ export default function EditProductPage() {
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("price")} *</label>
                 <input
-                  type="number" min={0}
+                  type="number"
+                  min={0}
                   value={form.price}
                   onChange={(e) => set("price", e.target.value)}
                   placeholder={t("pricePlaceholder")}
@@ -270,7 +271,8 @@ export default function EditProductPage() {
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("comparePrice")}</label>
                 <input
-                  type="number" min={0}
+                  type="number"
+                  min={0}
                   value={form.compare_price}
                   onChange={(e) => set("compare_price", e.target.value)}
                   placeholder={t("comparePricePlaceholder")}
@@ -290,7 +292,9 @@ export default function EditProductPage() {
                 >
                   <option value="">{t("categoryPlaceholder")}</option>
                   {categories.map((c) => (
-                    <option key={c.id} value={String(c.id)}>{c.name}</option>
+                    <option key={c.id} value={String(c.id)}>
+                      {c.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -304,7 +308,9 @@ export default function EditProductPage() {
                 >
                   <option value="">Choisir une sous-catégorie...</option>
                   {subcategories.map((s) => (
-                    <option key={s.id} value={String(s.id)}>{s.name}</option>
+                    <option key={s.id} value={String(s.id)}>
+                      {s.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -314,7 +320,8 @@ export default function EditProductPage() {
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-secondary-700">{t("stock")} *</label>
               <input
-                type="number" min={0}
+                type="number"
+                min={0}
                 value={form.stock}
                 onChange={(e) => set("stock", e.target.value)}
                 className={`h-10 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-primary-100 ${errors.stock ? "border-red-400" : "border-secondary-200 focus:border-primary-500"}`}
@@ -403,11 +410,21 @@ export default function EditProductPage() {
             {/* Checkboxes */}
             <div className="flex items-center gap-6">
               <label className="flex cursor-pointer items-center gap-2.5">
-                <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} className="h-4 w-4 rounded accent-primary-600" />
+                <input
+                  type="checkbox"
+                  checked={form.is_active}
+                  onChange={(e) => set("is_active", e.target.checked)}
+                  className="h-4 w-4 rounded accent-primary-600"
+                />
                 <span className="text-sm font-medium text-secondary-700">{t("isActive")}</span>
               </label>
               <label className="flex cursor-pointer items-center gap-2.5">
-                <input type="checkbox" checked={form.is_featured} onChange={(e) => set("is_featured", e.target.checked)} className="h-4 w-4 rounded accent-primary-600" />
+                <input
+                  type="checkbox"
+                  checked={form.is_featured}
+                  onChange={(e) => set("is_featured", e.target.checked)}
+                  className="h-4 w-4 rounded accent-primary-600"
+                />
                 <span className="text-sm font-medium text-secondary-700">{t("isFeatured")}</span>
               </label>
             </div>
@@ -435,14 +452,7 @@ export default function EditProductPage() {
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-wide text-secondary-500">{t("preview")}</p>
             <div className="max-w-xs">
-              <ProductCard
-                product={buildMockProduct(
-                  form,
-                  selectedSubcategory?.name ?? "",
-                  selectedCategory?.name ?? ""
-                )}
-                compact
-              />
+              <ProductCard product={buildMockProduct(form, selectedSubcategory?.name ?? "", selectedCategory?.name ?? "")} compact />
             </div>
           </div>
         </div>

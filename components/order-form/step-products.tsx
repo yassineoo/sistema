@@ -41,12 +41,7 @@ interface StepProductsProps {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function StepProducts({
-  data,
-  onUpdate,
-  onNext,
-  initialProductId,
-}: StepProductsProps) {
+export default function StepProducts({ data, onUpdate, onNext, initialProductId }: StepProductsProps) {
   const t = useTranslations("order.form");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -58,15 +53,7 @@ export default function StepProducts({
     return () => clearTimeout(timer);
   }, [search]);
 
-  const { data: productsData, isLoading } = useGetPublicProducts(
-    debouncedSearch,
-    page,
-    "",
-    "",
-    "",
-    "",
-    ""
-  );
+  const { data: productsData, isLoading } = useGetPublicProducts(debouncedSearch, page, "", "", "", "", "");
 
   const products = productsData?.results ?? [];
 
@@ -92,16 +79,14 @@ export default function StepProducts({
       if (existing) {
         if (existing.quantity >= product.stock) return;
         onUpdate({
-          items: data.items.map((i) =>
-            i.product_id === product.id ? { ...i, quantity: i.quantity + 1 } : i
-          ),
+          items: data.items.map((i) => (i.product_id === product.id ? { ...i, quantity: i.quantity + 1 } : i)),
         });
       } else {
         if (product.stock === 0) return;
         const newItem: CartItem = {
           product_id: product.id,
           product_name: product.name,
-          product_image: product.main_image ?? product.gallery[0]?.image ?? null,
+          product_image: product.main_image ?? product?.gallery[0]?.image ?? null,
           unit_price: product.price,
           quantity: 1,
           stock: product.stock,
@@ -109,7 +94,7 @@ export default function StepProducts({
         onUpdate({ items: [...data.items, newItem] });
       }
     },
-    [data.items, onUpdate]
+    [data.items, onUpdate],
   );
 
   const decreaseQty = useCallback(
@@ -120,22 +105,16 @@ export default function StepProducts({
         onUpdate({ items: data.items.filter((i) => i.product_id !== productId) });
       } else {
         onUpdate({
-          items: data.items.map((i) =>
-            i.product_id === productId ? { ...i, quantity: i.quantity - 1 } : i
-          ),
+          items: data.items.map((i) => (i.product_id === productId ? { ...i, quantity: i.quantity - 1 } : i)),
         });
       }
     },
-    [data.items, onUpdate]
+    [data.items, onUpdate],
   );
 
-  const getCartQty = (productId: number) =>
-    data.items.find((i) => i.product_id === productId)?.quantity ?? 0;
+  const getCartQty = (productId: number) => data.items.find((i) => i.product_id === productId)?.quantity ?? 0;
 
-  const subtotal = data.items.reduce(
-    (sum, item) => sum + Number(item.unit_price) * item.quantity,
-    0
-  );
+  const subtotal = data.items.reduce((sum, item) => sum + Number(item.unit_price) * item.quantity, 0);
 
   const canGoNext = data.items.length > 0;
 
@@ -145,10 +124,7 @@ export default function StepProducts({
     <div className="flex flex-col gap-6">
       {/* Search bar */}
       <div className="relative">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400"
-          size={18}
-        />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400" size={18} />
         <input
           type="text"
           value={search}
@@ -184,45 +160,28 @@ export default function StepProducts({
               const cartQty = getCartQty(product.id);
               const outOfStock = product.stock === 0;
               const atMax = cartQty >= product.stock;
-              const imageSrc = product.main_image ?? product.gallery[0]?.image ?? null;
+              const imageSrc = product.main_image ?? product?.gallery[0]?.image ?? null;
 
               return (
-                <motion.li
-                  key={product.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center gap-4 px-4 py-3"
-                >
+                <motion.li key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4 px-4 py-3">
                   {/* Thumbnail */}
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-secondary-100">
                     {imageSrc ? (
-                      <img
-                        src={imageSrc}
-                        alt={product.name}
-                        className="h-full w-full object-cover"
-                      />
+                      <img src={imageSrc} alt={product.name} className="h-full w-full object-cover" />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-600 to-primary-800">
-                        <span className="text-lg font-black text-white/80">
-                          {product.name.charAt(0).toUpperCase()}
-                        </span>
+                        <span className="text-lg font-black text-white/80">{product.name.charAt(0).toUpperCase()}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Info */}
                   <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <p className="truncate text-sm font-semibold text-secondary-900">
-                      {product.name}
-                    </p>
-                    <p className="text-sm font-bold text-primary-600">
-                      {Number(product.price).toLocaleString("fr-DZ")} DA
-                    </p>
+                    <p className="truncate text-sm font-semibold text-secondary-900">{product.name}</p>
+                    <p className="text-sm font-bold text-primary-600">{Number(product.price).toLocaleString("fr-DZ")} DA</p>
                     <span
                       className={`inline-block w-fit rounded-full px-2 py-0.5 text-xs font-medium ${
-                        outOfStock
-                          ? "bg-red-100 text-red-600"
-                          : "bg-emerald-100 text-emerald-700"
+                        outOfStock ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700"
                       }`}
                     >
                       {outOfStock ? "Rupture" : `${product.stock} en stock`}
@@ -240,9 +199,7 @@ export default function StepProducts({
                         >
                           <Minus size={14} />
                         </motion.button>
-                        <span className="w-6 text-center text-sm font-bold text-secondary-900">
-                          {cartQty}
-                        </span>
+                        <span className="w-6 text-center text-sm font-bold text-secondary-900">{cartQty}</span>
                         <motion.button
                           whileTap={{ scale: 0.9 }}
                           onClick={() => addToCart(product)}
@@ -292,34 +249,21 @@ export default function StepProducts({
 
             <ul className="flex flex-col gap-2">
               {data.items.map((item) => (
-                <li
-                  key={item.product_id}
-                  className="flex items-center justify-between text-sm"
-                >
+                <li key={item.product_id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <div className="h-8 w-8 shrink-0 overflow-hidden rounded-md bg-secondary-100">
                       {item.product_image ? (
-                        <img
-                          src={item.product_image}
-                          alt={item.product_name}
-                          className="h-full w-full object-cover"
-                        />
+                        <img src={item.product_image} alt={item.product_name} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-600 to-primary-800">
-                          <span className="text-xs font-bold text-white">
-                            {item.product_name.charAt(0)}
-                          </span>
+                          <span className="text-xs font-bold text-white">{item.product_name.charAt(0)}</span>
                         </div>
                       )}
                     </div>
-                    <span className="max-w-[160px] truncate text-secondary-700">
-                      {item.product_name}
-                    </span>
+                    <span className="max-w-[160px] truncate text-secondary-700">{item.product_name}</span>
                     <span className="text-secondary-400">x{item.quantity}</span>
                   </div>
-                  <span className="font-semibold text-secondary-900">
-                    {(Number(item.unit_price) * item.quantity).toLocaleString("fr-DZ")} DA
-                  </span>
+                  <span className="font-semibold text-secondary-900">{(Number(item.unit_price) * item.quantity).toLocaleString("fr-DZ")} DA</span>
                 </li>
               ))}
             </ul>
@@ -327,10 +271,7 @@ export default function StepProducts({
             {/* Subtotal */}
             <div className="mt-3 flex justify-end border-t border-primary-200 pt-3">
               <p className="text-sm font-bold text-primary-700">
-                Sous-total :{" "}
-                <span className="text-base text-primary-600">
-                  {subtotal.toLocaleString("fr-DZ")} DA
-                </span>
+                Sous-total : <span className="text-base text-primary-600">{subtotal.toLocaleString("fr-DZ")} DA</span>
               </p>
             </div>
           </motion.div>
@@ -338,11 +279,7 @@ export default function StepProducts({
       </AnimatePresence>
 
       {/* Empty cart hint */}
-      {data.items.length === 0 && !isLoading && (
-        <p className="text-center text-sm text-secondary-400">
-          {t("emptyCartDesc")}
-        </p>
-      )}
+      {data.items.length === 0 && !isLoading && <p className="text-center text-sm text-secondary-400">{t("emptyCartDesc")}</p>}
 
       {/* Next button */}
       <div className="flex justify-end">
