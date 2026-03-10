@@ -1,17 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations, useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { Menu, X } from "lucide-react";
+import { usePathname } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import LanguageSwitcher from "@/components/layouts/language-switcher";
+import { useCart } from "@/contexts/CartContext";
+import CartSidebar from "@/components/layouts/cart-sidebar";
+
+const navLinks = [
+  { href: "/", label: "Accueil" },
+  { href: "/products", label: "Promotions" },
+  { href: "/categories", label: "Catégories" },
+  { href: "/about", label: "À propos" },
+  { href: "/contact", label: "Contact" },
+];
 
 export default function PublicNavbar() {
-  const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
-  const isRTL = locale === "ar";
+  const { cartCount, openCart } = useCart();
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,14 +33,6 @@ export default function PublicNavbar() {
     setMobileOpen(false);
   }, [pathname]);
 
-  const navLinks = [
-    { href: "/", labelKey: "home" as const },
-    { href: "/products", labelKey: "promotions" as const },
-    { href: "/about", labelKey: "about" as const },
-    { href: "/categories", labelKey: "categories" as const },
-    { href: "/contact", labelKey: "contact" as const },
-  ];
-
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
@@ -43,40 +42,31 @@ export default function PublicNavbar() {
     <>
       <header
         className={`
-          sticky top-0 z-50 w-full transition-all duration-300
+          sticky top-0 z-40 w-full transition-all duration-300
           ${
             scrolled
               ? "bg-white/95 shadow-lg shadow-secondary-900/8 backdrop-blur-md"
               : "bg-white border-b border-secondary-100"
           }
         `}
-        dir={isRTL ? "rtl" : "ltr"}
       >
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
 
           {/* ── Logo ─────────────────────────────────── */}
-          <Link
-            href="/"
-            className={`flex items-center gap-3 shrink-0 group ${isRTL ? "flex-row-reverse" : ""}`}
-          >
-            {/* Logo image */}
+          <Link href="/" className="flex items-center gap-3 shrink-0 group">
             <img
               src="/logo.jpeg"
               alt="Sestima Confort"
               className="h-10 w-auto rounded-xl object-contain transition-transform duration-200 group-hover:scale-105"
             />
-            {/* Tagline — desktop only */}
             <span className="mt-0.5 hidden text-[0.6rem] font-semibold uppercase tracking-[0.15em] text-secondary-400 sm:block">
-              {t("tagline")}
+              Sestima Confort
             </span>
           </Link>
 
           {/* ── Desktop nav links ─────────────────────── */}
-          <nav
-            className={`hidden md:flex items-center gap-1 ${isRTL ? "flex-row-reverse" : ""}`}
-            aria-label="Main navigation"
-          >
-            {navLinks.map(({ href, labelKey }) => (
+          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
+            {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
@@ -97,38 +87,53 @@ export default function PublicNavbar() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                   />
                 )}
-                {t(labelKey)}
+                {label}
               </Link>
             ))}
           </nav>
 
-          {/* ── Desktop right actions ─────────────────── */}
-          <div
-            className={`hidden md:flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
-          >
-            <LanguageSwitcher />
-          </div>
+          {/* ── Right actions ─────────────────────────── */}
+          <div className="flex items-center gap-2">
+            {/* Cart button */}
+            <button
+              onClick={openCart}
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-secondary-600 transition-colors hover:bg-secondary-50 hover:text-secondary-900"
+              aria-label="Ouvrir le panier"
+            >
+              <ShoppingCart size={20} />
+              {cartCount > 0 && (
+                <motion.span
+                  key={cartCount}
+                  initial={{ scale: 0.6 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-600 px-1 text-[10px] font-black text-white"
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
+                </motion.span>
+              )}
+            </button>
 
-          {/* ── Mobile hamburger ──────────────────────── */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((o) => !o)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-secondary-600 transition-colors hover:bg-secondary-50 md:hidden"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={mobileOpen ? "close" : "open"}
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-              </motion.div>
-            </AnimatePresence>
-          </button>
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((o) => !o)}
+              className="flex h-10 w-10 items-center justify-center rounded-xl text-secondary-600 transition-colors hover:bg-secondary-50 md:hidden"
+              aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={mobileOpen}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={mobileOpen ? "close" : "open"}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                </motion.div>
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -136,7 +141,6 @@ export default function PublicNavbar() {
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="backdrop"
               initial={{ opacity: 0 }}
@@ -147,7 +151,6 @@ export default function PublicNavbar() {
               onClick={() => setMobileOpen(false)}
             />
 
-            {/* Drawer panel */}
             <motion.div
               key="drawer"
               initial={{ opacity: 0, y: -12 }}
@@ -155,14 +158,12 @@ export default function PublicNavbar() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
               className="fixed left-0 right-0 top-[73px] z-50 bg-white shadow-xl md:hidden"
-              dir={isRTL ? "rtl" : "ltr"}
             >
-              {/* Nav links */}
               <nav className="flex flex-col px-4 pt-4 pb-2" aria-label="Mobile navigation">
-                {navLinks.map(({ href, labelKey }, i) => (
+                {navLinks.map(({ href, label }, i) => (
                   <motion.div
                     key={href}
-                    initial={{ opacity: 0, x: isRTL ? 12 : -12 }}
+                    initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.2 }}
                   >
@@ -177,28 +178,34 @@ export default function PublicNavbar() {
                         }
                       `}
                     >
-                      {t(labelKey)}
+                      {label}
                     </Link>
                   </motion.div>
                 ))}
               </nav>
 
-              {/* Bottom actions */}
-              <div className="flex flex-col gap-3 border-t border-secondary-100 px-4 py-4">
-                <div className={`flex items-center ${isRTL ? "justify-end" : "justify-start"}`}>
-                  <LanguageSwitcher />
-                </div>
-                <Link
-                  href="/login"
-                  className="w-full rounded-xl border border-secondary-200 py-3 text-center text-sm font-medium text-secondary-500 transition-colors hover:bg-secondary-50"
+              {/* Cart button in mobile menu */}
+              <div className="border-t border-secondary-100 px-4 py-4">
+                <button
+                  onClick={() => { setMobileOpen(false); openCart(); }}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3 text-sm font-bold text-white transition hover:bg-primary-700"
                 >
-                  {t("login")}
-                </Link>
+                  <ShoppingCart size={16} />
+                  Mon Panier
+                  {cartCount > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-[10px] font-black text-primary-600">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      {/* ── Cart Sidebar ──────────────────────────────── */}
+      <CartSidebar />
     </>
   );
 }

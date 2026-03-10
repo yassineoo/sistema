@@ -86,7 +86,7 @@ export default function StepProducts({ data, onUpdate, onNext, initialProductId 
         const newItem: CartItem = {
           product_id: product.id,
           product_name: product.name,
-          product_image: product.main_image ?? product?.gallery[0]?.image ?? null,
+          product_image: product.main_image ?? product?.gallery?.[0]?.image ?? null,
           unit_price: product.price,
           quantity: 1,
           stock: product.stock,
@@ -160,7 +160,7 @@ export default function StepProducts({ data, onUpdate, onNext, initialProductId 
               const cartQty = getCartQty(product.id);
               const outOfStock = product.stock === 0;
               const atMax = cartQty >= product.stock;
-              const imageSrc = product.main_image ?? product?.gallery[0]?.image ?? null;
+              const imageSrc = product.main_image ?? product?.gallery?.[0]?.image ?? null;
 
               return (
                 <motion.li key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-4 px-4 py-3">

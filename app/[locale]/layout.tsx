@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import QueryProvider from "@/components/QueryProvider";
+import { CartProvider } from "@/contexts/CartContext";
 import { Toaster } from "sonner";
 import "../globals.css";
 
@@ -58,10 +59,12 @@ export default async function LocaleLayout({
         }}
       >
         <QueryProvider>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-          <Toaster richColors position="top-right" />
+          <CartProvider>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+            </NextIntlClientProvider>
+            <Toaster richColors position="top-right" />
+          </CartProvider>
         </QueryProvider>
       </body>
     </html>

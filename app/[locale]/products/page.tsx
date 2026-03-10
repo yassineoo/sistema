@@ -289,7 +289,6 @@ export default function ProductsPage() {
                 >
                   <ProductCard
                     product={product}
-                    onAddToOrder={() => handleAddToOrder(product)}
                   />
                 </motion.div>
               ))}
