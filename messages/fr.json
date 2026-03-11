@@ -352,7 +352,8 @@
     "created": "Categorie creee",
     "updated": "Categorie mise a jour",
     "deleted": "Categorie supprimee",
-    "error": "Erreur operation"
+    "error": "Erreur operation",
+    "subcategories": "Sous-catégories"
   },
   "deliveryAdmin": {
     "title": "Tarifs de livraison",

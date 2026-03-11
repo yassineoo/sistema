@@ -75,16 +75,16 @@ export const useDeleteCategory = () => {
 
 // ── Subcategory Queries ────────────────────────────────────────────────────────
 
-export const useGetSubcategories = (categoryId?: number) => {
+export const useGetSubcategories = (categoryId: number) => {
   return useQuery({
     queryKey: ["subcategories", categoryId],
     queryFn: async () => {
       const { data } = await axiosAPI.get<PaginatedResponse<Subcategory>>(
-        "api/categories/subcategories/",
-        { params: { category_id: categoryId || undefined } }
+        `api/categories/${categoryId}/subcategories/`
       );
       return data;
     },
+    enabled: !!categoryId,
   });
 };
 
@@ -93,15 +93,15 @@ export const useGetSubcategories = (categoryId?: number) => {
 export const useCreateSubcategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { name: string; category_id: number }) => {
+    mutationFn: async (payload: { name: string; categoryId: number }) => {
       const { data } = await axiosAPI.post<Subcategory>(
-        "api/categories/subcategories/",
-        payload
+        `api/categories/${payload.categoryId}/subcategories/`,
+        { name: payload.name }
       );
       return data;
     },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["subcategories"] });
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["subcategories", variables.categoryId] });
       qc.invalidateQueries({ queryKey: ["categories"] });
       qc.invalidateQueries({ queryKey: ["publicCategories"] });
     },
@@ -112,20 +112,22 @@ export const useUpdateSubcategory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
+      categoryId,
       id,
       payload,
     }: {
+      categoryId: number;
       id: number;
       payload: { name?: string };
     }) => {
       const { data } = await axiosAPI.patch<Subcategory>(
-        `api/categories/subcategories/${id}/`,
+        `api/categories/${categoryId}/subcategories/${id}/`,
         payload
       );
       return data;
     },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["subcategories"] });
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["subcategories", variables.categoryId] });
       qc.invalidateQueries({ queryKey: ["categories"] });
       qc.invalidateQueries({ queryKey: ["publicCategories"] });
     },
@@ -135,11 +137,11 @@ export const useUpdateSubcategory = () => {
 export const useDeleteSubcategory = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (id: number) => {
-      await axiosAPI.delete(`api/categories/subcategories/${id}/`);
+    mutationFn: async ({ categoryId, id }: { categoryId: number; id: number }) => {
+      await axiosAPI.delete(`api/categories/${categoryId}/subcategories/${id}/`);
     },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["subcategories"] });
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["subcategories", variables.categoryId] });
       qc.invalidateQueries({ queryKey: ["categories"] });
       qc.invalidateQueries({ queryKey: ["publicCategories"] });
     },

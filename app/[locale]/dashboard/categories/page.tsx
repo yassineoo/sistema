@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Edit2, Trash2, Check, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Edit2, Trash2, Check, X, Layers } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "sonner";
 import {
   useGetCategories,
@@ -131,6 +132,7 @@ function EditRow({ category, onSave, onCancel, isPending, t }: EditRowProps) {
 
 export default function CategoriesPage() {
   const t = useTranslations("categoriesAdmin");
+  const router = useRouter();
 
   const [createOpen, setCreateOpen] = useState(false);
   const [createName, setCreateName] = useState("");
@@ -380,6 +382,18 @@ export default function CategoriesPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              router.push(
+                                `/dashboard/categories/${cat.id}/subcategories`
+                              )
+                            }
+                            title={t("subcategories")}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-600 hover:bg-primary-50 hover:text-primary-700"
+                          >
+                            <Layers size={14} />
+                          </button>
                           <button
                             type="button"
                             onClick={() => setEditingId(cat.id)}
